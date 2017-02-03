@@ -1,0 +1,7 @@
+*.o
+*.rgb
+data
+*.idea
+*.swp
+
+
