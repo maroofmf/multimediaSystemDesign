@@ -4,4 +4,4 @@ data
 *.idea
 *.swp
 test
-
+*.class
