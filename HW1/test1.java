@@ -1,10 +1,10 @@
 import java.awt.*;
 import java.awt.image.*;
+import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
 public class test1{
-
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
 // Static Private Variables
@@ -18,7 +18,9 @@ private static int frameNumber = 1;
 byte[] pixelBuffer = {};
 private BufferedImage img = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);		
 private JFrame frame = new JFrame();
-
+private Timer timer;
+private long fileSize;	
+private double numberOfFrames;
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
 // Updates  next fram into image buffer
 
@@ -93,7 +95,7 @@ private JFrame frame = new JFrame();
 		try{
 			File inputFile = new File(fileName);
 			InputStream stream = new FileInputStream(inputFile);
-			long fileSize = inputFile.length();
+			fileSize = inputFile.length();
 			pixelBuffer  = new byte[(int)fileSize];
 			
 			int offset = 0;
@@ -109,40 +111,49 @@ private JFrame frame = new JFrame();
 		} catch(IOException e){
 			e.printStackTrace();
 		}
-	
-		// Display initial frame
-		getNextFrame();
-		createGUI(frame, "Test", img);			
+		// Calculate video params
+		numberOfFrames = ((double)fileSize)/(double)(3.0*imageWidth*imageHeight);
+		long timeInterval = (long)1000.00/(long)frameRate;
 		
-		// Synchronize frames
+		System.out.println(timeInterval);
+
+		// Initializing synchronization
+		synchronize sync = new synchronize();
+		timer = new Timer((int)timeInterval, sync);
+		timer.start();
 		
+	}
 
-
-		for(int i = 0; i< 99;i++){
-			getNextFrame();
-			updateFrame();
-		//	try{
-
-	
-		//		Thread.sleep(90);
-		//	}catch(InterruptedException e){
-		//		Thread.currentThread().interrupt();
-		//	}
-
+	class synchronize implements ActionListener{
 		
+		public void actionPerformed(ActionEvent e){
+
+			if(numberOfFrames > 1){
+				getNextFrame();
+				updateFrame();
+				numberOfFrames--;
+			}else{
+				timer.stop();
+			}
 		}
 
 
+		public synchronize(){
+			super();
+			// Display initial frame
+			getNextFrame();
+			createGUI(frame, "Test", img);			
+		}
+	
 	}
-
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
 // Main
 
-	//public static void main(String[] args){
+	public static void main(String[] args){
 		
-	///	test1 a = new test1(args);
-	//}
+		test1 a = new test1(args);
+	}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
 // Constructor
@@ -173,7 +184,6 @@ private JFrame frame = new JFrame();
 		System.out.println("\033[0;32mSucessfully Initialized\033[;0m");
 
 		// Display Image
-		//test1 displayObject = new test1();
 		display_rgb(fileName);
 		
 
