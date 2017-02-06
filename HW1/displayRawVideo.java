@@ -21,7 +21,7 @@ private JFrame frame = new JFrame();
 private Timer timer;
 private long fileSize;	
 private double numberOfFrames;
-
+private JLabel label;
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
 // Constructor
 
@@ -87,7 +87,7 @@ private double numberOfFrames;
 		// Display image
 		GridBagLayout gLayout = new GridBagLayout();
 		frame.getContentPane().setLayout(gLayout);
-		JLabel label = new JLabel(topLabel);
+		label = new JLabel(topLabel);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		// Image
@@ -109,6 +109,18 @@ private double numberOfFrames;
 		
 		System.out.println("\033[0;32mDisplay Window Up & Running!\033[0m");
 
+	}
+
+	private void updateFinish(){
+		
+		JLabel label1 = new JLabel("Video Finished");
+		c.gridy = 0;
+		frame.getContentPane().remove(label);
+		frame.getContentPane().add(label1,c);
+		frame.getContentPane().revalidate();
+		frame.getContentPane().repaint();
+		
+		return;
 	}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -145,18 +157,10 @@ private double numberOfFrames;
 		} catch(IOException e){
 			e.printStackTrace();
 		}
-	
-		
-		//System.out.println(imageWidth);
-		//System.out.println(imageHeight);
-		//System.out.println(fileSize);
-		//System.exit(0);
 		
 		// Calculate video params
 		numberOfFrames = ((double)fileSize)/(double)(3.0*imageWidth*imageHeight);
 		long timeInterval = (long)1000.00/(long)frameRate;
-		
-		System.out.println(timeInterval);
 
 		// Initializing synchronization
 		synchronize sync = new synchronize();
@@ -177,6 +181,7 @@ private double numberOfFrames;
 				updateFrame();
 				numberOfFrames--;
 			}else{
+				updateFinish();
 				timer.stop();
 			}
 		}
@@ -185,7 +190,7 @@ private double numberOfFrames;
 			super();
 			// Display initial frame
 			getNextFrame();
-			createGUI("Test");			
+			createGUI(String.format("w = %d, h= %d, fps = %d",imageWidth,imageHeight,frameRate));			
 		}
 	
 	}
