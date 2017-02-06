@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
-public class test1{
+public class displayRawVideo{
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
 // Static Private Variables
@@ -16,13 +16,48 @@ private int imageHeight = 256;
 private int frameRate = 10;
 private static int frameNumber = 1;
 byte[] pixelBuffer = {};
-private BufferedImage img = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);		
+private BufferedImage img;	
 private JFrame frame = new JFrame();
 private Timer timer;
 private long fileSize;	
 private double numberOfFrames;
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
-// Updates  next fram into image buffer
+// Constructor
+
+	public displayRawVideo(String[] args){
+		
+		System.out.println("\033[0;31mInitializing Program\033[0m");
+
+		// Input Variables
+		int argsLength = args.length;
+		String fileName = "";
+		
+		// Parse Command Line Arguments
+		if(argsLength < 3 || argsLength > 4){
+			System.out.println("\033[0;31mWrong Usage! Correct Usage: java [program name] [.rgb file] [Image Width] [Image Height] [fps <optional>]\033[0m");
+			System.exit(-1);
+		}else if (argsLength < 4 ){
+			fileName = args[0];
+			imageWidth = Integer.parseInt(args[1]);
+			imageHeight = Integer.parseInt(args[2]);
+		} else if(argsLength == 4){	
+			fileName = args[0];
+			imageWidth = Integer.parseInt(args[1]);
+			imageHeight = Integer.parseInt(args[2]);
+			frameRate = Integer.parseInt(args[3]);
+		}
+		
+		System.out.println("\033[0;32mSucessfully Initialized\033[;0m");
+
+		// Display Image
+		img = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);		
+		display_rgb(fileName);
+		
+	}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------//
+// Updates next frame into image buffer
 
 	 private void getNextFrame(){
 			
@@ -46,7 +81,8 @@ private double numberOfFrames;
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
 // Create initial GUI and display image
-	private void createGUI(JFrame frame, String topLabel, BufferedImage img){
+
+	private void createGUI(String topLabel){
 
 		// Display image
 		GridBagLayout gLayout = new GridBagLayout();
@@ -75,16 +111,14 @@ private double numberOfFrames;
 
 	}
 
-
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
-// Create initial GUI and display image
+// Update Next Frame
 
 	private void updateFrame(){
 		
 		lbIm1.setIcon(new ImageIcon(img));
 		frame.getContentPane().add(lbIm1,c);
 		frame.pack();
-		//System.out.println("\033[0;32mUpdated Frame\033[0m");
 
 	}	
 
@@ -111,6 +145,13 @@ private double numberOfFrames;
 		} catch(IOException e){
 			e.printStackTrace();
 		}
+	
+		
+		//System.out.println(imageWidth);
+		//System.out.println(imageHeight);
+		//System.out.println(fileSize);
+		//System.exit(0);
+		
 		// Calculate video params
 		numberOfFrames = ((double)fileSize)/(double)(3.0*imageWidth*imageHeight);
 		long timeInterval = (long)1000.00/(long)frameRate;
@@ -123,6 +164,9 @@ private double numberOfFrames;
 		timer.start();
 		
 	}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------//
+// Nested class for frame synchronization
 
 	class synchronize implements ActionListener{
 		
@@ -137,12 +181,11 @@ private double numberOfFrames;
 			}
 		}
 
-
 		public synchronize(){
 			super();
 			// Display initial frame
 			getNextFrame();
-			createGUI(frame, "Test", img);			
+			createGUI("Test");			
 		}
 	
 	}
@@ -150,42 +193,8 @@ private double numberOfFrames;
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
 // Main
 
-	public static void main(String[] args){
-		
-		test1 a = new test1(args);
+	public static void main(String[] args){		
+		displayRawVideo reader = new displayRawVideo(args);
 	}
 
-//---------------------------------------------------------------------------------------------------------------------------------------------------//
-// Constructor
-
-	public test1(String[] args){
-		
-		System.out.println("\033[0;31mInitializing Program\033[0m");
-
-		// Input Variables
-		int argsLength = args.length;
-		String fileName = "";
-		
-		// Parse Command Line Arguments
-		if(argsLength < 3 || argsLength > 4){
-			System.out.println("\033[0;31mWrong Usage! Correct Usage: java [program name] [.rgb file] [Image Width] [Image Height] [fps <optional>]\033[0m");
-			System.exit(-1);
-		}else if (argsLength < 4 ){
-			fileName = args[0];
-			imageWidth = Integer.parseInt(args[1]);
-			imageHeight = Integer.parseInt(args[2]);
-		} else if(argsLength == 4){	
-			fileName = args[0];
-			imageWidth = Integer.parseInt(args[1]);
-			imageHeight = Integer.parseInt(args[2]);
-			frameRate = Integer.parseInt(args[3]);
-		}
-		
-		System.out.println("\033[0;32mSucessfully Initialized\033[;0m");
-
-		// Display Image
-		display_rgb(fileName);
-		
-
-	}
 }
