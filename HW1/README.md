@@ -1,10 +1,10 @@
 ##**Assignment 1**##
 
-Author: Maroof Mohammed Farooq  
-Email: maroofmf@usc.edu  
-Subject: CSCI 576  
-Compiler: java (build 1.8.0)  
-Dependencies: None  
+**Author:** Maroof Mohammed Farooq  
+**Email:** maroofmf@usc.edu  
+**Subject:** CSCI 576  
+**Compiler:** java (build 1.8.0)  
+**Dependencies:** None  
 
 ###**Instructions**###
 * Please upload given data to this folder. Make sure that the .rgb files are in the folder named "data".
