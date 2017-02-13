@@ -62,3 +62,8 @@ compileOnly:
 	javac $(PROGRAM).java
 	javac videoData.java
 	javac convertFormat.java
+
+# Package file
+package:
+	zip -r CSCI576_7126869945_Farooq.zip *.java *.md makefile
+
