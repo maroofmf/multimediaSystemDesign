@@ -99,7 +99,7 @@ private int totalFrames;
 		System.out.println("\033[0;32mConversion complete \033[0m");
 		
 		// Save video and return
-		outputVideo.saveVideo("/output"+outputFileName);
+		outputVideo.saveVideo("./output/"+outputFileName);
 		
 		return;
 
@@ -168,7 +168,7 @@ private int totalFrames;
 		System.out.println("\033[0;32mConversion complete \033[0m");
 		
 		// Save video and return
-		outputVideo.saveVideo("output"+outputFileName);
+		outputVideo.saveVideo("./output/"+outputFileName);
 		
 		return;
 
