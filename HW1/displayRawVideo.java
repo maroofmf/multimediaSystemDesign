@@ -27,7 +27,7 @@ private JLabel label;
 
 	public displayRawVideo(String[] args){
 		
-		System.out.println("\033[0;31mInitializing Program\033[0m");
+		System.out.println("\033[0;31mInitializing Display Program\033[0m");
 
 		// Input Variables
 		int argsLength = args.length;
@@ -67,9 +67,9 @@ private JLabel label;
 			for(int rowIndex =0; rowIndex < imageHeight; rowIndex++){
 				for(int columnIndex = 0; columnIndex < imageWidth; columnIndex++){
 					
-					byte redPixel = pixelBuffer[ind+frameNumberCorrection];
-					byte greenPixel = pixelBuffer[ind+imageWidth*imageHeight+frameNumberCorrection];
-					byte bluePixel = pixelBuffer[ind+2*imageWidth*imageHeight+frameNumberCorrection];
+					byte redPixel = pixelBuffer[rowIndex*imageWidth+columnIndex+frameNumberCorrection];
+					byte greenPixel = pixelBuffer[rowIndex*imageWidth+columnIndex+imageWidth*imageHeight+frameNumberCorrection];
+					byte bluePixel = pixelBuffer[rowIndex*imageWidth+columnIndex+2*imageWidth*imageHeight+frameNumberCorrection];
 					
 					int pixelValue = 0xff000000 | ((redPixel&0xff)<<16) | ((greenPixel&0xff)<<8) | (bluePixel&0xff);
 					img.setRGB(columnIndex,rowIndex,pixelValue);
@@ -77,6 +77,7 @@ private JLabel label;
 				}
 			}
 			frameNumber++;
+
 	}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -111,6 +112,8 @@ private JLabel label;
 
 	}
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------//
+// Update Video finish status
 	private void updateFinish(){
 		
 		JLabel label1 = new JLabel("Video Finished");
@@ -143,7 +146,6 @@ private JLabel label;
 			InputStream stream = new FileInputStream(inputFile);
 			fileSize = inputFile.length();
 			pixelBuffer  = new byte[(int)fileSize];
-			
 			int offset = 0;
 			int numRead = 0;
 
