@@ -5,3 +5,5 @@ data
 *.swp
 test
 *.class
+*.zip
+*.raw
